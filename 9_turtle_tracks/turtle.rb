@@ -33,8 +33,6 @@ class Board
       if raw_command =~ /REPEAT/
         ary = raw_command.split
         times = ary[1].to_i
-        # format is
-        # REPEAT 2 [ RT 90 FD 15 ]
         to_repeat = ary[3..-2]
         parsed_commands_to_repeat = []
         while to_repeat.any?
@@ -72,63 +70,33 @@ class Board
       @orientation = (@orientation + rotation) % 360
     elsif direction == 'LT'
       @orientation = (@orientation - rotation) % 360
-    else
-      raise "Unknown turn: #{direction}"
     end
   end
 
-  # TODO clean this up
   def move(direction)
-    if direction == 'FD'
-      case @orientation
-      when 0
-        @position[:row] -= 1
-      when 45
-        @position[:row] -=1
-        @position[:column] += 1
-      when 90
-        @position[:column] += 1
-      when 135
-        @position[:row] += 1
-        @position[:column] += 1
-      when 180
-        @position[:row] += 1
-      when 225
-        @position[:row] += 1
-        @position[:column] -= 1
-      when 270
-        @position[:column] -= 1
-      when 315
-        @position[:row] -= 1
-        @position[:column] -= 1
-      else
-        raise "Invalid orientation: #{@orientation}"
-      end
-    elsif direction == 'BK'
-      case @orientation
-      when 0
-        @position[:row] += 1
-      when 45
-        @position[:row] +=1
-        @position[:column] -= 1
-      when 90
-        @position[:column] -= 1
-      when 135
-        @position[:row] -= 1
-        @position[:column] -= 1
-      when 180
-        @position[:row] -= 1
-      when 225
-        @position[:row] -= 1
-        @position[:column] += 1
-      when 270
-        @position[:column] += 1
-      when 315
-        @position[:row] += 1
-        @position[:column] += 1
-      end
-    else
-      raise "Unknown move: #{direction}"
+    position = @orientation
+    position = (position + 180) % 360 if direction == 'BK'
+    case position
+    when 0
+      @position[:row] -= 1
+    when 45
+      @position[:row] -=1
+      @position[:column] += 1
+    when 90
+      @position[:column] += 1
+    when 135
+      @position[:row] += 1
+      @position[:column] += 1
+    when 180
+      @position[:row] += 1
+    when 225
+      @position[:row] += 1
+      @position[:column] -= 1
+    when 270
+      @position[:column] -= 1
+    when 315
+      @position[:row] -= 1
+      @position[:column] -= 1
     end
     @board_array[@position[:row]][@position[:column]] = 'X'
   end
