@@ -31,7 +31,7 @@ class Board
     @commands = []
     @raw_commands.each do |raw_command|
       if raw_command =~ /REPEAT/
-        ary = raw_command.split(' ')
+        ary = raw_command.split
         times = ary[1].to_i
         # format is
         # REPEAT 2 [ RT 90 FD 15 ]
@@ -56,7 +56,7 @@ class Board
 
   def execute_commands
     @commands.each do |command|
-      direction, extent = command.split(' ')
+      direction, extent = command.split
       if %w(FD BK).include?(direction)
         extent.to_i.times { move(direction) }
       elsif %w(LT RT).include?(direction)
@@ -77,6 +77,7 @@ class Board
     end
   end
 
+  # TODO clean this up
   def move(direction)
     if direction == 'FD'
       case @orientation
