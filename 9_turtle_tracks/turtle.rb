@@ -1,12 +1,8 @@
+require 'byebug'
 class Board
-  COMMANDS = %w(FD RT LT BK REPEAT)
-
-  attr_reader :size
-
   def initialize(file)
-    content = File.read(ARGV[0]).split("\n")
-    @size = content[0].to_i
-    @raw_commands = content[2..-1]
+    content = File.read(file).split("\n")
+    @size, @raw_commands = content[0].to_i, content[2..-1]
     @orientation = 0
     @board_array = @size.times.map { ['.'] * @size }
     init_position
@@ -19,13 +15,7 @@ class Board
     @raw_commands.each do |raw_command|
       if raw_command =~ /REPEAT/
         ary = raw_command.split
-        times = ary[1].to_i
-        to_repeat = ary[3..-2]
-        parsed_commands_to_repeat = []
-        while to_repeat.any?
-          parsed_commands_to_repeat << "#{to_repeat.shift} #{to_repeat.shift}"
-        end
-        @commands << (parsed_commands_to_repeat * times)
+        @commands << (ary[3..-2].each_slice(2).to_a.map{|c| c.join(' ')} * ary[1].to_i)
         @commands.flatten!
       else
         @commands << raw_command
@@ -35,7 +25,7 @@ class Board
 
   def to_file(file)
     File.open(file, 'w') do |f|
-      f.write self
+      f.write @board_array.dup.map{|row| row.join(' ')}.join("\n")
     end
   end
 
@@ -46,8 +36,6 @@ class Board
         extent.to_i.times { move(direction) }
       elsif %w(LT RT).include?(direction)
         turn(direction, extent.to_i)
-      else
-        raise "Unknown direction: #{direction}"
       end
     end
   end
@@ -89,21 +77,20 @@ class Board
   end
 
   private
-  def init_board
-    @board_array = @size.times.map do
-      ['.'] * @size
-    end
-  end
-
   def init_position
     center = @board_array.size / 2
     @position = {row: center, column: center}
     @board_array[center][center] = 'X'
   end
-
-  def to_s
-    @board_array.dup.map{|row| row.join(' ')}.join("\n")
-  end
 end
 
-Board.new(ARGV[0]).to_file('my_output.txt')
+if $0 == __FILE__
+  Board.new(ARGV[0]).to_file('my_output.txt') if $0 == __FILE__
+else
+  describe Board do
+    it 'should create a board that matches the solution' do
+      Board.new('complex.logo').to_file('my_output.txt')
+      expect(File.read('my_output.txt')).to eq File.read('my_solution.txt')
+    end
+  end
+end
