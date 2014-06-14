@@ -1,27 +1,14 @@
-class LogoFile
-  attr_reader :size, :commands
-
-  def initialize(file)
-    content = File.read(ARGV[0]).split("\n")
-    @size = content[0].to_i
-    @commands = content[2..-1]
-  end
-
-  def to_s
-    "#{size}\n#{commands.join("\n")}"
-  end
-end
-
 class Board
   COMMANDS = %w(FD RT LT BK REPEAT)
 
   attr_reader :size
 
-  def initialize(logo_file)
-    @size = logo_file.size
-    @raw_commands = logo_file.commands
+  def initialize(file)
+    content = File.read(ARGV[0]).split("\n")
+    @size = content[0].to_i
+    @raw_commands = content[2..-1]
     @orientation = 0
-    init_board
+    @board_array = @size.times.map { ['.'] * @size }
     init_position
     parse_commands
     execute_commands
@@ -119,8 +106,4 @@ class Board
   end
 end
 
-l = LogoFile.new(ARGV[0])
-puts l
-board = Board.new(l)
-puts board
-board.to_file('my_output.txt')
+Board.new(ARGV[0]).to_file('my_output.txt')
