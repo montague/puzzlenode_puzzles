@@ -30,13 +30,18 @@ if $0 == __FILE__
   raise 'omg, not ready!!'
 else
   describe DegSep, '#parse_from_file' do
-    it 'works' do
-      d = DegSep.new
-      d.parse_from_file('sample_input.txt')
-
-      expect(d.connections.keys.sort).to match_array [
+    before do
+      @d = DegSep.new
+      @d.parse_from_file('sample_input.txt')
+    end
+    it 'parses speakers' do
+      expect(@d.connections.keys.sort).to match_array [
         'alberta', 'bob', 'christie', 'duncan', 'emily', 'farid'
       ]
+    end
+
+    it 'parses names' do
+
     end
   end
 
