@@ -85,7 +85,7 @@ class Board
 end
 
 if $0 == __FILE__
-  Board.new(ARGV[0]).to_file('my_output.txt') if $0 == __FILE__
+  Board.new(ARGV[0]).to_file('my_output.txt')
 else
   describe Board do
     it 'should create a board that matches the solution' do
