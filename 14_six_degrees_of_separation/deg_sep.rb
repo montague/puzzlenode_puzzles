@@ -7,6 +7,12 @@ class DegSep
     @connections = Hash.new{ |h,k| h[k] = [] }
   end
 
+  def parse_from_file(file)
+    File.readlines(file).each do |line|
+      parse(line)
+    end
+  end
+
   def parse(str)
     scanner = StringScanner.new(str)
     speaker = scanner.scan_until(/:/).chop
@@ -21,15 +27,19 @@ class DegSep
 end
 
 if $0 == __FILE__
-  File.readlines('complex_input.txt').each do |line|
-    speaker = DegSep.new.parse_speaker(line)
-    if speaker.nil?
-      raise 'OMG'
-    else
-      puts speaker
+  raise 'omg, not ready!!'
+else
+  describe DegSep, '#parse_from_file' do
+    it 'works' do
+      d = DegSep.new
+      d.parse_from_file('sample_input.txt')
+
+      expect(d.connections.keys.sort).to match_array [
+        'alberta', 'bob', 'christie', 'duncan', 'emily', 'farid'
+      ]
     end
   end
-else
+
   describe DegSep, '#parse' do
     it "works on simple" do
       d = DegSep.new
