@@ -11,16 +11,21 @@ class DegSep
     File.readlines(file).each do |line|
       parse(line)
     end
+    prune_non_first_order_connections
   end
 
-  #def reconcile_connections
-    #@connections.dup.each do |speaker, names|
-      #names.each do |name|
-        #unless @connections[name].include?(speaker)
-          #@connections[speaker].delete(name)
-        #end
-      #end
-    #end
+  def prune_non_first_order_connections
+    @connections.dup.each do |speaker, names|
+      names.each do |name|
+        unless @connections[name].include?(speaker)
+          @connections[speaker].delete(name)
+        end
+      end
+    end
+  end
+
+  #def find_mutual_connections_for(speaker)
+    #[]
   #end
 
   def parse(str)
@@ -39,6 +44,20 @@ end
 if $0 == __FILE__
   raise 'omg, not ready!!'
 else
+  #describe DegSep, '#find_mutual_connections_for' do
+    #before do
+      #@d = DegSep.new
+      #@d.parse_from_file('sample_input.txt')
+    #end
+
+    #it 'works' do
+      #alberta_conns = @d.find_mutual_connections_for('alberta')
+      #expect(alberta_conns).to match_array [
+        #['bob','christie'],['duncan','emily'],['farid']
+      #]
+    #end
+  #end
+
   describe DegSep, '#parse_from_file' do
     before do
       @d = DegSep.new
@@ -52,7 +71,7 @@ else
     end
 
     it 'parses names' do
-      expect(@d.connections['alberta']).to match_array %w(bob christie duncan)
+      expect(@d.connections['alberta']).to match_array %w(bob christie)
       expect(@d.connections['bob']).to match_array %w(alberta christie duncan)
       expect(@d.connections['christie']).to match_array %w(alberta bob emily)
       expect(@d.connections['duncan']).to match_array %w(bob emily farid)
