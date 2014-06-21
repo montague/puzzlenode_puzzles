@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)http://www.puzzlenode.com/puzzles/14-six-degrees-of-separation -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+[#14] Six Degrees of Separation
+- PuzzleNode
+</title>
+<meta content="width=1050" name="viewport">
+<link href="./[#14] Six Degrees of Separation - PuzzleNode_files/application-a38a855521b9cd6951fa4415cfb6c9ac.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" async="" src="./[#14] Six Degrees of Separation - PuzzleNode_files/ga.js"></script><script src="./[#14] Six Degrees of Separation - PuzzleNode_files/application-6358a00b47cf3fd3b2d2ec6c971946c6.js" type="text/javascript"></script>
+<meta content="authenticity_token" name="csrf-param">
+<meta content="AXOL5PJfcn2yX/WQDbMJiRZ0+LxuJzCwqqs8DlTTmqU=" name="csrf-token">
+
+</head>
+<body>
+<div id="flash">
+</div>
+
+<a href="http://github.com/mendicant-original/puzzlenode/">
+<img alt="Fork me on Github" src="./[#14] Six Degrees of Separation - PuzzleNode_files/forkme_right_red_aa0000.png" style="position: absolute; top:0; right: 0; border: 0;z-index: 100;">
+</a>
+
+<header>
+<div class="wrap">
+<div id="logo">
+<h1><a href="http://www.puzzlenode.com/">Puzzle Node</a></h1>
+<img alt="Loading" class="loading" src="./[#14] Six Degrees of Separation - PuzzleNode_files/loading-50859741278eef899f4cea7a15ade818.gif">
+</div>
+</div>
+<nav>
+<div class="wrap"><ul>
+<li><a href="http://www.puzzlenode.com/puzzles">Puzzles</a></li>
+<li class="node"></li>
+<li><a href="http://www.puzzlenode.com/leaderboard">Leaderboard</a></li>
+<li class="node"></li>
+<li><a href="http://www.puzzlenode.com/announcements">Announcements</a></li>
+<li class="node"></li>
+<li><a href="http://www.puzzlenode.com/puzzles/14-six-degrees-of-separation#" onclick="PuzzleNode.about(); return false;">About</a></li>
+<li class="right">
+<a href="http://www.puzzlenode.com/login" id="login">Log in with GitHub</a>
+</li>
+
+</ul>
+<div class="clear"></div>
+</div>
+</nav>
+</header>
+<div id="content">
+<div class="wrap"><div id="puzzle">
+<h1>[#14] Six Degrees of Separation</h1>
+<div class="puzzle-info">
+<span class="section">
+This puzzle was contributed by
+<a href="http://mendicantuniversity.org/" target="_blank">Andrea Singh and Gregory Brown</a>
+and published on
+November 15, 2011
+</span>
+<span class="right">
+<button class="clean-gray small" data-url="/puzzles/14-six-degrees-of-separation/submissions/new">
+Submit your solution
+</button>
+
+</span>
+</div>
+
+<div id="description">
+<p>The CEO of ABC Widgets Corp. has been concocting a new startup idea for a while now. He is of the opinion that the Twitter recommendation engine is deeply flawed, mainly because it seems to focus on the "follower" concept rather than conversations. Convinced that conversations are a better indicator of social connectedness, he sees a sure-win business opportunity in building a Twitter client that can "discover" social networks - and thus generate more informed recommendations on who to follow - based on a stream of Twitter conversations.</p>
+<p>To help drum up some venture capital, you've been hired to quickly build out a proof of concept. Not to worry, you will be generously compensated for your time with stock options!</p>
+
+<h2>The Proof of Concept</h2>
+<p>You will need to parse an input file containing a number of tweets and construct the underlying social network based on who has talked to whom. </p>
+
+<h2>The "Social Network"</h2>
+<p>The goal is to depict the social network you've uncovered by listing all active Twitter users in alphabetical order, directly followed by their respective social connections.</p>
+
+<h3>What Is a "Connection"?</h3>
+<p>Connections between users are drawn based on conversations (or "mutual mentions" in the Twitter sense) and are classified according to their degree of proximity.</p>
+<p>A direct or first order connection exists between two users if they both have had at least one tweet that mentions the other. For example, there is a direct connection between A and B if A mentions B and B mentions A. However, there would be no first order connection if A mentions B, but B doesn't mention A. So one-way mentions can be treated as "noise" and ignored altogether.</p>
+<p>If A has a first order connection with B and B has a first order connection with C, then A has a second order connection with C. In a similar vein, there can be third, fourth, fifth, etc. order connections. </p>
+
+<h2>The Input File</h2>
+<p>The input file contains a number of tweet-like messages separated by line breaks. Every tweet begins with the username of the sender, followed directly by a colon and then by the content of the tweet. The tweet itself will in many cases mention one or more Twitter users.</p>
+
+<h3>Some Example Tweets</h3>
+
+<pre><code>alberta: hey @christie. what will we be reading at the book club meeting tonight?
+</code></pre>
+<p>The person who sent this tweet is <code>alberta</code> and she mentions one other Twitter user, <code>@christie</code>. Mentions are always preceded by an <code>@</code>-symbol. Twitter usernames can contain alphanumeric characters and underscores.</p>
+<p>Tweets can contain multiple mentions and can occur anywhere in the tweet. Typically, mentions will be at the beginning, as in the example tweet above. Mentions can also occur at the end, like so:</p>
+
+<pre><code>christie: "Every day, men and women, conversing, beholding and beholden..." /cc @alberta, @bob
+</code></pre>
+
+<h2>The Output File</h2>
+<p>As mentioned above, the output file should contain all <strong>active</strong> Twitter users - i.e. users who have tweeted at least once - in alphabetical order. Each of these active users should be directly followed by their social connections. The first, second, third, etc. order connections should be grouped on separate lines and the names within each group should be listed in alphabetical order.</p>
+<p>To illustrate how to plot these connections, let's consider an input file with these tweets:</p>
+
+<pre><code>alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books."
+bob: "They impress us ever with the conviction that one nature wrote and the same reads." /cc @alberta
+alberta: hey @christie. what will we be reading at the book club meeting tonight?
+christie: "Every day, men and women, conversing, beholding and beholden..." /cc @alberta, @bob
+bob: @duncan, @christie so I see it is Emerson tonight
+duncan: We'll also discuss Emerson's friendship with Walt Whitman /cc @bob
+alberta: @duncan, hope you're bringing those peanut butter chocolate cookies again :D
+emily: Unfortunately, I won't be able to make it this time /cc @duncan
+duncan: @emily, oh what a pity. I'll fill you in next week.
+christie: @emily, "Books are the best of things, well used; abused, among the worst." -- Emerson
+emily: Ain't that the truth /cc @christie
+duncan: hey @farid, can you pick up some of those cookies on your way home?
+farid: @duncan, might have to work late tonight, but I'll try
+</code></pre>
+<p>Based on the mentions, we can identify the following first order connections:</p>
+
+<pre><code>alberta &lt;--&gt; bob
+alberta &lt;--&gt; christie
+bob &lt;--&gt; duncan
+christie &lt;--&gt; bob
+duncan &lt;--&gt; emily
+emily &lt;--&gt; christie
+farid &lt;--&gt; duncan
+</code></pre>
+<p>Seeing that the output list has to be alphabetical, let's begin with alberta's connections.</p>
+<p>Alberta has had direct conversations with bob and christie. Note that even though alberta has mentioned duncan once, duncan has never mentioned alberta, so there is no direct connection between them. </p>
+<p>Besides having had conversations with alberta, bob has talked to duncan and christie. Christie has had conversations with alberta, bob and emily. As a result, duncan and emily are alberta's second order connections.</p>
+<p>Note that even though bob and christie have had a two-way conversation of their own, they should not be added as second order connections, since they have already been included as first order ones. In other words, a connection should only be listed once and the nearest connection takes precedence.</p>
+<p>Moving on. Since emily has only ever talked to duncan and christie, there are no new connections added through her. Duncan, however, brings in farid as a 3rd order connection.</p>
+<p>The output for alberta should then look as follows:</p>
+
+<pre><code>alberta
+bob, christie
+duncan, emily
+farid
+</code></pre>
+<p>Continuing in alphabetical order, we would then need to plot the connections for bob, then for christie, and so on. The final output file then would look like this:</p>
+
+<pre><code>alberta
+bob, christie
+duncan, emily
+farid
+
+bob
+alberta, christie, duncan
+emily, farid
+
+christie
+alberta, bob, emily
+duncan
+farid
+
+duncan
+bob, emily, farid
+alberta, christie
+
+emily
+christie, duncan
+alberta, bob, farid
+
+farid
+duncan
+bob, emily
+alberta, christie
+
+</code></pre>
+<p>Notice that even with a relatively small number of users and tweets it is quite difficult to work out the higher order social connections manually.</p>
+<p>You can test out your code with the <code>sample_input.txt</code> input file, which contains the same tweets as in the example we walked through above. The correct output for this sample can be found in <code>sample_output.txt</code>. </p>
+<p>The input file you need to actually use to solve this puzzle is called <code>complex_input.txt</code>.</p>
+
+<h2>Files</h2>
+<div id="files">
+<a href="http://www.puzzlenode.com/puzzles/14-six-degrees-of-separation.md"><img alt="File_small" src="./[#14] Six Degrees of Separation - PuzzleNode_files/file_small-fdb0961974cd128fb06af7c805de725b.png">14-six-degrees-of-separation.md</a>
+<a href="https://puzzlenode.s3.amazonaws.com/attachments/49/complex_input.txt"><img alt="File_small" src="./[#14] Six Degrees of Separation - PuzzleNode_files/file_small-fdb0961974cd128fb06af7c805de725b.png">complex_input.txt</a>
+<a href="https://puzzlenode.s3.amazonaws.com/attachments/50/sample_input.txt"><img alt="File_small" src="./[#14] Six Degrees of Separation - PuzzleNode_files/file_small-fdb0961974cd128fb06af7c805de725b.png">sample_input.txt</a>
+<a href="https://puzzlenode.s3.amazonaws.com/attachments/51/sample_output.txt"><img alt="File_small" src="./[#14] Six Degrees of Separation - PuzzleNode_files/file_small-fdb0961974cd128fb06af7c805de725b.png">sample_output.txt</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div class="wrap">
+<div id="about">
+<p>
+PuzzleNode is a site for coders who enjoy to work on challenging
+problems, and is inspired by similar efforts such as
+<a href="http://projecteuler.net/">Project Euler</a>
+and the
+<a href="http://ipsc.ksp.sk/">Internet Problem Solving Contest</a>
+. Once upon a time it also served as an entrance exam of sorts for
+folks looking to join
+<a href="http://mendicantuniversity.org/">Mendicant University.</a>
+</p>
+<p>
+This project was developed, maintained, and supported by Mendicant
+University students and staff until the school
+<a href="http://mendicantuniversity.org/updates/2012/05/06/building-a-new-mu.html">changed directions</a>
+and put a hold on all existing projects, including PuzzleNode. If you
+are interested in jump starting this project just open a ticket in our
+<a href="https://github.com/mendicant-original/puzzlenode/issues">issue tracker</a>
+to get the ball rolling.
+</p>
+<p>
+Happy hacking!
+<a class="close" href="http://www.puzzlenode.com/puzzles/14-six-degrees-of-separation#" onclick="PuzzleNode.about(); return false;">Return to top</a>
+</p>
+</div>
+<div class="teaser">
+<a href="http://www.puzzlenode.com/puzzles/14-six-degrees-of-separation#" onclick="PuzzleNode.about(); return false;">PuzzleNode is a site for coders who enjoy to work on challenging problems ...</a>
+</div>
+<div class="bottom">
+<a href="http://mendicantuniversity.org/"><div id="mendicant-logo"></div>
+</a></div>
+</div>
+<script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-15397397-5']);
+  _gaq.push(['_trackPageview']);
+  
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</div>
+
+
+</body></html>

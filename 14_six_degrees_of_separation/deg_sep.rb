@@ -16,17 +16,17 @@ class DegSep
 
   def prune_non_first_order_connections
     @connections.dup.each do |speaker, names|
-      names.each do |name|
-        unless @connections[name].include?(speaker)
-          @connections[speaker].delete(name)
+      names[0].each do |name|
+        unless @connections[name][0].include?(speaker)
+          @connections[speaker][0].delete(name)
         end
       end
     end
   end
 
-  #def find_mutual_connections_for(speaker)
-    #[]
-  #end
+  def find_mutual_connections_for(speaker, degree)
+
+  end
 
   def parse(str)
     scanner = StringScanner.new(str)
@@ -37,7 +37,9 @@ class DegSep
       scanner.scan_until(/@/)
       names << scanner.scan_until(/\W/).chop
     end
-    @connections[speaker] += names.sort
+    @connections[speaker] << [] if @connections[speaker].empty?
+    (@connections[speaker][0] += names).sort!
+
   end
 end
 
@@ -71,12 +73,12 @@ else
     end
 
     it 'parses names' do
-      expect(@d.connections['alberta']).to match_array %w(bob christie)
-      expect(@d.connections['bob']).to match_array %w(alberta christie duncan)
-      expect(@d.connections['christie']).to match_array %w(alberta bob emily)
-      expect(@d.connections['duncan']).to match_array %w(bob emily farid)
-      expect(@d.connections['emily']).to match_array %w(christie duncan)
-      expect(@d.connections['farid']).to match_array %w(duncan)
+      expect(@d.connections['alberta']).to match_array [%w(bob christie)]
+      expect(@d.connections['bob']).to match_array [%w(alberta christie duncan)]
+      expect(@d.connections['christie']).to match_array [%w(alberta bob emily)]
+      expect(@d.connections['duncan']).to match_array [%w(bob emily farid)]
+      expect(@d.connections['emily']).to match_array [%w(christie duncan)]
+      expect(@d.connections['farid']).to match_array [%w(duncan)]
     end
   end
 
@@ -87,7 +89,7 @@ else
       d.parse(s)
 
       expect(d.connections.keys).to match_array ["alberta"]
-      expect(d.connections['alberta']).to match_array ['bob']
+      expect(d.connections['alberta'].first).to match_array ['bob']
     end
 
     it 'works on more complicated' do
@@ -95,7 +97,7 @@ else
       s = "daniella_hamill: @madelyn, @concepcion_hoppe: Power is in nature the essential measure  of right"
       d.parse(s)
       expect(d.connections.keys).to eq ["daniella_hamill"]
-      expect(d.connections['daniella_hamill']).to match_array %w(concepcion_hoppe madelyn)
+      expect(d.connections['daniella_hamill'].first).to match_array %w(concepcion_hoppe madelyn)
     end
   end
 end
