@@ -158,21 +158,21 @@ describe "Stacker::Interpreter" do
     execute %w[ 
        :true
        IF
-       :false
-       IF
-       1
+         :false
+         IF
+         1
+         ELSE
+         2
+         THEN
+         3
        ELSE
-       2
-       THEN
-       3
-       ELSE
-       :true
-       IF
-       4
-       ELSE
-       5
-       THEN
-       6
+         :true
+         IF
+         4
+         ELSE
+         5
+         THEN
+         6
        THEN
        7
      ]

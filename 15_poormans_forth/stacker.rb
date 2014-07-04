@@ -21,11 +21,17 @@ module Stacker
       when '<' then __execute('less_than')
       when '>' then __execute('greater_than')
       when '=' then __execute('equals')
-      when 'IF' then __execute('if')
-      when 'ELSE' then __execute('else')
-      when 'THEN' then __execute('then')
+      when 'IF' then execute_if
+      when 'ELSE' then execute_else
+      when 'THEN' then execute_then
       else
-        @stack.push(command.to_i) if execute?
+        if execute?
+          if is_number?(command)
+            @stack.push(command.to_i)
+          else
+            @stack.push(command)
+          end
+        end
       end
     end
 
@@ -37,18 +43,17 @@ module Stacker
     def execute?
       if @conditional_stack.last == :if &&
         @execute_until_stack.last == :else
-        return true
+        true
       elsif @conditional_stack.last == :else &&
         @execute_until_stack.last == :then 
-        return true
+        true
       elsif @conditional_stack.empty?
-        return true
+        true
       else
         false
       end
     end
 
-    # end of conditional
     def execute_then
       @execute_until_stack.pop
       @conditional_stack.pop
@@ -60,17 +65,13 @@ module Stacker
     end
 
     def execute_if
-      # if previous is :true,
-      # execute until ELSE, skip until THEN
-      # if previous is false,
-      # skip until ELSE, execute until THEN
       arg = @stack.pop
+      @conditional_stack.push :if
       if arg == ":true"
         @execute_until_stack.push :else
       elsif arg == ":false"
         @execute_until_stack.push :then
       end
-      @conditional_stack.push :if
     end
 
     def execute_equals
