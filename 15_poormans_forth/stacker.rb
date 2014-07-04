@@ -23,16 +23,9 @@ module Stacker
       when '=' then __execute('equals')
       when 'IF' then __execute('if')
       when 'ELSE' then __execute('else')
-      when 'THEN'
-        end_of_conditional
+      when 'THEN' then __execute('then')
       else
-        if execute?
-          if is_number?(command)
-            @stack.push(command.to_i)
-          else
-            @stack.push(command)
-          end
-        end
+        @stack.push(command.to_i) if execute?
       end
     end
 
@@ -55,7 +48,8 @@ module Stacker
       end
     end
 
-    def end_of_conditional
+    # end of conditional
+    def execute_then
       @execute_until_stack.pop
       @conditional_stack.pop
     end
@@ -129,7 +123,7 @@ module Stacker
     end
 
     def binary_operands
-      [@stack.pop.to_i, @stack.pop.to_i]
+      [@stack.pop, @stack.pop]
     end
 
     def is_number?(str)
