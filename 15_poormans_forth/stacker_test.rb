@@ -278,6 +278,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([4,6,7,15])
   end
 
+  focus
   it "implements TIMES command" do
     execute %w[
       5

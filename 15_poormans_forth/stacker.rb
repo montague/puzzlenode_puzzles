@@ -49,6 +49,7 @@ module Stacker
       @if_blocks == @current_block
     end
 
+    # end of "if" block
     def execute_then
       @current_block.pop
       @if_blocks.pop
