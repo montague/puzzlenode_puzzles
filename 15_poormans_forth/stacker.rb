@@ -29,6 +29,7 @@ module Stacker
     end
 
     def execute(command)
+      command.strip!
       command.chomp!
       return unless command.strip.length > 0
       if @times_block.any? && command != '/TIMES'
@@ -99,7 +100,7 @@ module Stacker
     def execute_rot
       # ROT takes the third element on the stack and places it on the
       # top of the stack, pushing the first and second element downwards
-      raise "Invalid operation: ROT on only #{@stack.size} elements" unless @stack.size >= 3
+      #raise "Invalid operation: ROT on only #{@stack.size} elements" unless @stack.size >= 3
       @stack.push(@stack.slice!(2))
     end
 
