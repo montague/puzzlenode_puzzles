@@ -11,7 +11,7 @@ describe "Stacker::Interpreter" do
 
   let(:interpreter) { Stacker::Interpreter.new }
 
-  focus
+  
   it "implements ADD" do
     execute %w[
       2
@@ -22,7 +22,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([5])
   end
 
-  focus
+  
   it "implements SUBTRACT command" do
     execute %w[
       1
@@ -33,7 +33,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([-1])
   end
   
-  focus
+  
   it "implements MULTIPLY" do
     execute %w[
       3
@@ -44,7 +44,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([30])
   end
 
-  focus
+  
   it "implements DIVIDE" do
     execute %w[
       6
@@ -55,7 +55,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([3])
   end
   
-  focus
+  
   it "implements MOD" do
     execute %w[
       4
@@ -69,7 +69,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([1,0])
   end
   
-  focus
+  
   it "implements <" do
     execute %w[
       3
@@ -83,7 +83,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([:true, :false])
   end
   
-  focus
+  
   it "implements >" do
     execute %w[
       3
@@ -97,7 +97,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([:false, :true])
   end
 
-  focus
+  
   it "implements =" do
     execute %w[
       1
@@ -111,7 +111,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([:true, :false])
   end
   
-  focus
+  
   it "implements the IF command" do
     execute %w[
       :true
@@ -130,7 +130,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([3, 10])
   end
 
-  focus
+  
   it 'implements the IF command without ELSE' do
     execute %w[
       :true
@@ -153,7 +153,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([3, 10])
   end
 
-  focus
+  
   it "implements the IF command in nesting" do
     execute %w[ 
        :true
@@ -180,7 +180,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([2,3,7])
   end
 
-  focus
+  
   it "implements the IF command in another 2-level nesting" do
     execute %w[
       :false
@@ -228,7 +228,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([7,8,9,12,13,14,15])
   end
 
-  focus
+  
   it "implements the IF command in 3-level nesting" do
     execute %w[
       :true
@@ -278,7 +278,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([4,6,7,15])
   end
 
-  focus
+  
   it "implements TIMES command" do
     execute %w[
       5
@@ -292,6 +292,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([8])
   end
 
+  
   it "implements TIMES inside of IF command" do
     execute %w[
       :true
@@ -321,6 +322,7 @@ describe "Stacker::Interpreter" do
 
     interpreter.stack.must_equal([24])
   end
+  
   
   it "implements IF inside of TIMES command" do
     execute %w[
@@ -358,6 +360,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([400])
   end
   
+  
   it "implements DUP command" do
     execute %w[
       1
@@ -368,6 +371,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([1,2,2])
   end
 
+  
   it "implements SWAP command" do
     execute %w[
       1
@@ -378,6 +382,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([2,1])
   end
   
+  
   it "implements DROP" do
     execute %w[
       1
@@ -387,6 +392,7 @@ describe "Stacker::Interpreter" do
     
     interpreter.stack.must_equal([1]) 
   end
+  
   
   it "implements ROT" do
     execute %w[
@@ -403,6 +409,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([:foo,:bar,:foobar, :quux, :baz])
   end
 
+  
   it "implements support for adding arbitrary symbols to the stack" do
     execute %w[
       :foo
