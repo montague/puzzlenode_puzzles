@@ -7,8 +7,8 @@ module Stacker
 
     def initialize
       @stack = []
-      @execute_until_stack = []
-      @conditional_stack = []
+      @if_blocks = []
+      @current_block = []
     end
 
     def execute(command)
@@ -29,6 +29,11 @@ module Stacker
           if is_number?(command)
             @stack.push(command.to_i)
           else
+            command = if %w(:true :false).include?(command)
+                        command == ":true" ? :true : :false
+                      else
+                        command
+                      end
             @stack.push(command)
           end
         end
@@ -41,36 +46,32 @@ module Stacker
     end
 
     def execute?
-      if @conditional_stack.last == :if &&
-        @execute_until_stack.last == :else
-        true
-      elsif @conditional_stack.last == :else &&
-        @execute_until_stack.last == :then 
-        true
-      elsif @conditional_stack.empty?
-        true
-      else
-        false
-      end
+      @if_blocks == @current_block
     end
 
     def execute_then
-      @execute_until_stack.pop
-      @conditional_stack.pop
+      @current_block.pop
+      @if_blocks.pop
     end
 
     def execute_else
-      @conditional_stack.pop
-      @conditional_stack.push :else
+      @current_block.pop
+      @current_block.push(:else)
     end
 
     def execute_if
-      arg = @stack.pop
-      @conditional_stack.push :if
-      if arg == ":true"
-        @execute_until_stack.push :else
-      elsif arg == ":false"
-        @execute_until_stack.push :then
+      arg = if [:true,:false].include?(@stack.last)
+              @stack.pop
+            else
+              :noop
+            end
+      @current_block.push(:if)
+      if arg == :true
+        @if_blocks.push(:if)
+      elsif arg == :false
+        @if_blocks.push(:else)
+      else
+        @if_blocks.push(:noop)
       end
     end
 

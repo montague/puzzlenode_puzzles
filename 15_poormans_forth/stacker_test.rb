@@ -179,7 +179,8 @@ describe "Stacker::Interpreter" do
 
     interpreter.stack.must_equal([2,3,7])
   end
-  
+
+  focus
   it "implements the IF command in another 2-level nesting" do
     execute %w[
       :false
@@ -227,6 +228,7 @@ describe "Stacker::Interpreter" do
     interpreter.stack.must_equal([7,8,9,12,13,14,15])
   end
 
+  focus
   it "implements the IF command in 3-level nesting" do
     execute %w[
       :true
