@@ -1,0 +1,20 @@
+DROP_UNTIL
+65
+  /TIMES
+    SUBTRACT 
+    1 
+    DUP
+  TIMES 
+  SUBTRACT
+  1
+  DUP 
+100
+  THEN
+    DROP_UNTIL
+  ELSE
+    :true
+  IF
+  =
+  ROT
+  DUP
+PROCEDURE DROP_UNTIL

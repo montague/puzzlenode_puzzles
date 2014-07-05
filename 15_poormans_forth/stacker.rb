@@ -14,7 +14,23 @@ module Stacker
       @procedures_block = []
     end
 
+    def execute_file(file)
+      File.readlines(file).each do |command|
+        execute(command)
+      end
+    end
+
+    def to_file(file)
+      File.open(file, 'w') do |f|
+        while s = @stack.pop
+          f.puts s
+        end
+      end
+    end
+
     def execute(command)
+      command.chomp!
+      return unless command.strip.length > 0
       if @times_block.any? && command != '/TIMES'
         @times_block.last[1].push(command)
         return
