@@ -9,7 +9,7 @@ else
       output_file = 'my_sample_output.txt'
       interpreter = Stacker::Interpreter.new
       interpreter.execute_file(input_file)
-      interpreter.to_file(output_file)
+      interpreter.dump_stack_to_file(output_file)
       expect(File.read output_file).to eq File.read('sample_output.txt')
     end
   end

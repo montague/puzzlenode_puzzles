@@ -20,8 +20,9 @@ module Stacker
       end
     end
 
-    def to_file(file)
+    def dump_stack_to_file(file)
       File.open(file, 'w') do |f|
+        f.puts Time.now
         while s = @stack.pop
           f.puts s
         end
@@ -29,9 +30,14 @@ module Stacker
     end
 
     def execute(command)
-      command.strip!
-      command.chomp!
-      return unless command.strip.length > 0
+      command = command.strip.chomp
+      return unless command.length > 0
+      # DEBUG
+      #if command == '65'
+        #@break = true
+      #end
+      #byebug if @break
+      # DEBUG
       if @times_block.any? && command != '/TIMES'
         @times_block.last[1].push(command)
         return
@@ -58,22 +64,18 @@ module Stacker
       when 'SWAP' then __execute('swap')
       when 'DROP' then __execute('drop')
       when 'ROT' then __execute('rot')
-      when /\APROCEDURE ([A-Z]+)\z/
+      when /\APROCEDURE (\w+)\z/
         execute_procedure_start($1) if execute?
       when '/PROCEDURE' then __execute('procedure_end')
       else
         if execute?
-          if is_number?(command)
-            @stack.push(command.to_i)
-          elsif is_symbol(command)
-            @stack.push(command[1..-1].to_sym)
-          elsif @procedures.key?(command)
+          if @procedures.key?(command)
             procedure = @procedures[command]
             procedure.each do |command|
               execute(command)
             end
           else
-            @stack.push(command)
+            @stack.push(eval command)
           end
         end
       end
@@ -100,7 +102,7 @@ module Stacker
     def execute_rot
       # ROT takes the third element on the stack and places it on the
       # top of the stack, pushing the first and second element downwards
-      #raise "Invalid operation: ROT on only #{@stack.size} elements" unless @stack.size >= 3
+      raise "Invalid operation: ROT on only #{@stack.size} elements" unless @stack.size >= 3
       @stack.push(@stack.slice!(2))
     end
 
@@ -195,7 +197,7 @@ module Stacker
 
     def execute_binary_predicate(operator)
       execute_binary_operation(operator) do |result|
-        result ? :true : :false
+        result.to_s.to_sym
       end
     end
 
@@ -208,14 +210,6 @@ module Stacker
 
     def binary_operands
       [@stack.pop, @stack.pop]
-    end
-
-    def is_symbol(str)
-      str[0] == ':'
-    end
-
-    def is_number?(str)
-      str =~ /\A[+-]?\d+\z/
     end
   end
 end

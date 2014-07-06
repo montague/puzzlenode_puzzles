@@ -415,9 +415,10 @@ describe "Stacker::Interpreter" do
       :foo
       :bar
       :baz
+      :true
     ]
 
-    interpreter.stack.must_equal([:foo,:bar,:baz])
+    interpreter.stack.must_equal([:foo,:bar,:baz,:true])
   end
 
   def execute(commands)
