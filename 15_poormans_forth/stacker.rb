@@ -31,12 +31,6 @@ module Stacker
     def execute(command)
       command = command.strip.chomp
       return unless command.length > 0
-      # DEBUG
-      #if command == '65'
-        #@break = true
-      #end
-      #byebug if @break
-      # DEBUG
       if @times_block.any? && command != '/TIMES'
         @times_block.last[1].push(command)
         return
