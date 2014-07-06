@@ -1,7 +1,12 @@
 require_relative 'stacker'
 
 if $0 == __FILE__
-  puts "soon..."
+  input_file = 'challenge.stack'
+  output_file = 'my_challenge_output.txt'
+  Stacker::Interpreter.new.tap do |interpreter|
+    interpreter.execute_file(input_file)
+    interpreter.dump_stack_to_file(output_file)
+  end
 else
   describe Stacker do
     it 'creates the correct output' do
