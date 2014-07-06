@@ -22,9 +22,8 @@ module Stacker
 
     def dump_stack_to_file(file)
       File.open(file, 'w') do |f|
-        f.puts Time.now
-        while s = @stack.pop
-          f.puts s
+        until @stack.empty?
+          f.puts @stack.pop.inspect
         end
       end
     end
@@ -103,7 +102,7 @@ module Stacker
       # ROT takes the third element on the stack and places it on the
       # top of the stack, pushing the first and second element downwards
       raise "Invalid operation: ROT on only #{@stack.size} elements" unless @stack.size >= 3
-      @stack.push(@stack.slice!(2))
+      @stack.push(@stack.slice!(-3))
     end
 
     def execute_drop
