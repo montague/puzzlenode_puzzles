@@ -78,8 +78,12 @@ describe ChessValidator do
       expect(@cv.validate_move 'b6','b4').to eq 'ILLEGAL'
       # one space backward
       expect(@cv.validate_move 'b6','b7').to eq 'ILLEGAL'
+      # three spaces backward
+      expect(@cv.validate_move 'h5','h2').to eq 'ILLEGAL'
       # one space forward to occupied space
       expect(@cv.validate_move 'h5','h4').to eq 'ILLEGAL'
+      # diagonal without capturing
+      expect(@cv.validate_move 'f2','g3').to eq 'ILLEGAL'
     end
 
     it 'validates a rook move correctly'

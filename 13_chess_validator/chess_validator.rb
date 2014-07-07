@@ -54,9 +54,17 @@ class ChessValidator
   def validate_pawn_move(from, to, color)
     from_column, from_row = from.split('')
     to_column, to_row = to.split('')
+    piece_at_to_position = at_position(to)
+
     # assumption:
     # black pawns start in row 7
     # white pawns start in rows 2
+
+    if from_column != to_column && piece_at_to_position == EMPTY
+      return ILLEGAL
+    end
+
+    return LEGAL
 
     # capturing
     #if from_column != to_column &&
