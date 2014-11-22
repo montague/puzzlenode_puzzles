@@ -39,10 +39,39 @@ class ChessValidator
     end
   end
 
+  def piece_in_path?(from, to)
+    # does not include starting point or ending point
+    from_row, from_column = translate_position(from)
+    to_row, to_column = translate_position(to)
+    # vertical
+    # horizontal
+    # diagonal
+
+    # vertical
+    if from_column == to_column
+      start = [from_row, to_row].min + 1
+      finish = [from_row, to_row].max - 1
+      (start..finish).each do |row_index|
+        position = untranslate_position(row_index, from_column)
+        if at_position(position) != EMPTY
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   private
+
+  # takes "a8" => [0,0]
   def translate_position(position)
     column, row = position.split('')
     [ROW_MAP[row].to_i, COLUMN_MAP[column].to_i]
+  end
+
+  # takes [0,0] => "a8"
+  def untranslate_position(row, column)
+    "#{COLUMN_MAP.invert[column]}#{ROW_MAP.invert[row]}"
   end
 
   def parse_array_from_string(string)
@@ -51,21 +80,51 @@ class ChessValidator
     end
   end
 
+
   def validate_pawn_move(from, to, color)
-    from_column, from_row = from.split('')
-    to_column, to_row = to.split('')
+    from_row, from_column = translate_position(from)
+    to_row, to_column = translate_position(to)
     piece_at_to_position = at_position(to)
-
     # assumption:
-    # black pawns start in row 7
-    # white pawns start in rows 2
+    # black pawns start in row 1
+    # white pawns start in row 6
 
+
+    # cannot move two spaces forward after first move
+    if color == BLACK
+      if from_row > 1 && (to_row - from_row) > 1
+        return ILLEGAL
+      end
+    else
+      if from_row < 6 && (from_row - to_row) > 1
+        return ILLEGAL
+      end
+    end
+
+    # cannot move diagonally unless capturing
     if from_column != to_column && piece_at_to_position == EMPTY
       return ILLEGAL
     end
 
+    # cannot move backward
+    if color == BLACK && (to_row < from_row)
+      return ILLEGAL
+    elsif color == WHITE && (to_row > from_row)
+      return ILLEGAL
+    end
+
+    # cannot move forward into or over occupied space
+    if piece_at_to_position != EMPTY && from_column == to_column
+      if color == BLACK && (from_row < to_row)
+        return ILLEGAL
+      elsif color == WHITE && (from_row > to_row)
+        return ILLEGAL
+      end
+    end
+
     return LEGAL
 
+    #
     # capturing
     #if from_column != to_column &&
       #at_position(to) != EMPTY

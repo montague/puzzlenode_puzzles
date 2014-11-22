@@ -52,38 +52,105 @@ describe ChessValidator do
     end
   end
 
-  describe '#validate_move' do
-    before do 
-      @cv = ChessValidator.new(File.read 'complex_board.txt')
-      #   a  b  c  d  e  f  g  h
-      # 8 bK -- -- -- -- bB -- --
-      # 7 -- -- -- -- -- bP -- --
-      # 6 -- bP wR -- wB -- bN --
-      # 5 wN -- bP bR -- -- -- wP
-      # 4 -- -- -- -- wK wQ -- wP
-      # 3 wR -- bB wN wP -- -- --
-      # 2 -- wP bQ -- -- wP -- --
-      # 1 -- -- -- -- -- wB -- --
+  describe 'with a complex bored' do
+    before do
+      @cv = ChessValidator.new(File.read 'test_complex_board.txt')
+      #     0  1  2  3  4  5  6  7
+      #     a  b  c  d  e  f  g  h
+      # 0 8 bK -- -- -- -- bB -- --
+      # 1 7 -- -- -- -- -- bP bP --
+      # 2 6 -- bP wR -- wB -- bN --
+      # 3 5 wN -- bP bR -- -- -- wP
+      # 4 4 -- -- -- -- wK wQ -- wP
+      # 5 3 wR -- bB wN wP -- -- --
+      # 6 2 -- wP bQ wP -- wP -- --
+      # 7 1 -- -- -- -- -- wB -- --
     end
 
-    it 'validates a pawn move correctly', focus: true do
-      # one space forward
-      expect(@cv.validate_move 'b2','b3').to eq 'LEGAL'
-      # two spaces forward as first move
-      expect(@cv.validate_move 'b2','b4').to eq 'LEGAL'
-      # capture
-      expect(@cv.validate_move 'b2','c3').to eq 'LEGAL'
+    context '#piece_in_path?' do
+      it 'detects a piece in a vertical path' do
+        # down to up
+        expect(@cv.piece_in_path?('c2', 'c4')).to eq true
+        expect(@cv.piece_in_path?('c6', 'c8')).to eq false
+        # up to down
+        expect(@cv.piece_in_path?('d5', 'd1')).to eq true
+        expect(@cv.piece_in_path?('a3', 'a1')).to eq false
+      end
 
-      # two spaces forwad after first move
-      expect(@cv.validate_move 'b6','b4').to eq 'ILLEGAL'
-      # one space backward
-      expect(@cv.validate_move 'b6','b7').to eq 'ILLEGAL'
-      # three spaces backward
-      expect(@cv.validate_move 'h5','h2').to eq 'ILLEGAL'
-      # one space forward to occupied space
-      expect(@cv.validate_move 'h5','h4').to eq 'ILLEGAL'
-      # diagonal without capturing
-      expect(@cv.validate_move 'f2','g3').to eq 'ILLEGAL'
+      it 'detects a piece in a horizontal path' do
+        # left to right
+        expect(@cv.piece_in_path?('a3', 'f3')).to be_truthy
+        # right to left
+        expect(@cv.piece_in_path?('c6', 'a6')).to be_truthy
+      end
+
+      it 'detects a piece in a diagonal path' do
+        # up left to right
+        expect(@cv.piece_in_path?('', '')).to be_truthy
+        # up right to left
+        expect(@cv.piece_in_path?('', '')).to be_truthy
+        # down left to right
+        expect(@cv.piece_in_path?('', '')).to be_truthy
+        # down right to left
+        expect(@cv.piece_in_path?('', '')).to be_truthy
+      end
+    end
+
+    context 'validating pawn moves' do
+
+      it 'allows one space forward' do
+        # one space forward
+        expect(@cv.validate_move 'b2','b3').to eq 'LEGAL'
+      end
+
+      it 'allows two spaces forward as first move' do
+        # two spaces forward as first move (white)
+        expect(@cv.validate_move 'b2','b4').to eq 'LEGAL'
+        # two spaces forward as first move (black)
+        expect(@cv.validate_move 'f7','f5').to eq 'LEGAL'
+      end
+
+      it 'allows capture' do
+        # capture (white to black)
+        expect(@cv.validate_move 'b2','c3').to eq 'LEGAL'
+        # capture (black to white)
+        expect(@cv.validate_move 'f7','e6').to eq 'LEGAL'
+      end
+
+      it 'does not allow diagonal without capturing' do
+        # diagonal without capturing (white)
+        expect(@cv.validate_move 'f2','g3').to eq 'ILLEGAL'
+        # diagonal without capturing (black)
+        expect(@cv.validate_move 'g7','h6').to eq 'ILLEGAL'
+      end
+
+      it 'does not allow two spaces or more after first move' do
+        # two spaces forwad after first move (black)
+        expect(@cv.validate_move 'b6','b4').to eq 'ILLEGAL'
+        # three spaces forwad after first move (white)
+        expect(@cv.validate_move 'h5','h8').to eq 'ILLEGAL'
+      end
+
+      it 'does not allow moving backward' do
+        # one space backward (black)
+        expect(@cv.validate_move 'g7','g8').to eq 'ILLEGAL'
+        # three spaces backward (white)
+        expect(@cv.validate_move 'h4','h1').to eq 'ILLEGAL'
+      end
+
+      it 'does not allow moving foward to occupied space' do
+        # one space forward to occupied space (white)
+        expect(@cv.validate_move 'h4','h5').to eq 'ILLEGAL'
+        # one space forward to occupied space (black)
+        expect(@cv.validate_move 'g7','g6').to eq 'ILLEGAL'
+      end
+
+      it 'does not allow jumping over other pieces' do
+        # black
+        expect(@cv.validate_move 'g7', 'g6').to eq 'ILLEGAL'
+        # white
+        expect(@cv.validate_move 'd2', 'd4').to eq 'ILLEGAL'
+      end
     end
 
     it 'validates a rook move correctly'
