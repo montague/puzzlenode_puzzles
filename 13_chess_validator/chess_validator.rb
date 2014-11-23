@@ -43,9 +43,6 @@ class ChessValidator
     # does not include starting point or ending point
     from_row, from_column = translate_position(from)
     to_row, to_column = translate_position(to)
-    # vertical
-    # horizontal
-    # diagonal
 
     # vertical
     if from_column == to_column
@@ -58,18 +55,44 @@ class ChessValidator
         end
       end
     end
+
+    # horizontal
+    if from_row == to_row
+      start = [from_column, to_column].min + 1
+      finish = [from_column, to_column].max - 1
+      (start..finish).each do |column_index|
+        position = untranslate_position(from_row, column_index)
+        if at_position(position) != EMPTY
+          return true
+        end
+      end
+    end
+
+    # diagonal
+    row_operand = from_row > to_row ? :- : :+
+    column_operand = from_column > to_column ? :- : :+
+    row = from_row.send(row_operand, 1)
+    column = from_column.send(column_operand, 1)
+    while([row, column] != [to_row, to_column])
+     if at_position(untranslate_position(row, column)) != EMPTY
+       return true
+     end
+     row = row.send(row_operand, 1)
+     column = column.send(column_operand, 1)
+    end
+
     return false
   end
 
   private
 
-  # takes "a8" => [0,0]
+  # "a8" => [0,0]
   def translate_position(position)
     column, row = position.split('')
     [ROW_MAP[row].to_i, COLUMN_MAP[column].to_i]
   end
 
-  # takes [0,0] => "a8"
+  # [0,0] => "a8"
   def untranslate_position(row, column)
     "#{COLUMN_MAP.invert[column]}#{ROW_MAP.invert[row]}"
   end
@@ -123,24 +146,6 @@ class ChessValidator
     end
 
     return LEGAL
-
-    #
-    # capturing
-    #if from_column != to_column &&
-      #at_position(to) != EMPTY
-      #if color == WHITE && from_
-
-    #end
-
-    #if from_column == to_column
-      #if color == 'b' && from_row == '7'
-        #return LEGAL if %w(6 5).include?(to_row)
-      #end
-
-      #if color == 'w' && from_row == '2'
-        #return LEGAL if %w(3 4).include?(to_row)
-      #end
-    #end
   end
 end
 

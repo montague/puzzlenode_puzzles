@@ -79,20 +79,26 @@ describe ChessValidator do
 
       it 'detects a piece in a horizontal path' do
         # left to right
-        expect(@cv.piece_in_path?('a3', 'f3')).to be_truthy
+        expect(@cv.piece_in_path?('a3', 'f3')).to eq true
+        expect(@cv.piece_in_path?('a8', 'e8')).to eq false
         # right to left
-        expect(@cv.piece_in_path?('c6', 'a6')).to be_truthy
+        expect(@cv.piece_in_path?('c6', 'a6')).to eq true
+        expect(@cv.piece_in_path?('e8', 'b8')).to eq false
       end
 
       it 'detects a piece in a diagonal path' do
         # up left to right
-        expect(@cv.piece_in_path?('', '')).to be_truthy
+        expect(@cv.piece_in_path?('b3', 'e6')).to eq true
+        expect(@cv.piece_in_path?('a2', 'c4')).to eq false
         # up right to left
-        expect(@cv.piece_in_path?('', '')).to be_truthy
+        expect(@cv.piece_in_path?('g2', 'd5')).to eq true
+        expect(@cv.piece_in_path?('d6', 'b8')).to eq false
         # down left to right
-        expect(@cv.piece_in_path?('', '')).to be_truthy
+        expect(@cv.piece_in_path?('b3', 'd1')).to eq true
+        expect(@cv.piece_in_path?('b8', 'd6')).to eq false
         # down right to left
-        expect(@cv.piece_in_path?('', '')).to be_truthy
+        expect(@cv.piece_in_path?('h8', 'f6')).to eq true
+        expect(@cv.piece_in_path?('g7', 'd4')).to eq false
       end
     end
 
