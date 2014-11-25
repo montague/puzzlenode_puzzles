@@ -1,8 +1,9 @@
-bK -- -- -- -- bB -- --
--- -- -- -- -- bP -- --
--- bP wR -- wB -- bN --
-wN -- bP bR -- -- -- wP
--- -- -- -- wK wQ -- wP
-wR -- bB wN wP -- -- --
--- wP bQ -- -- wP -- --
--- -- -- -- -- wB -- --
+   a  b  c  c  e  f  g  h
+8  bK -- -- -- -- bB -- --
+7  -- -- -- -- -- bP -- --
+6  -- bP wR -- wB -- bN --
+5  wN -- bP bR -- -- -- wP
+4  -- -- -- -- wK wQ -- wP
+3  wR -- bB wN wP -- -- --
+2  -- wP bQ -- -- wP -- --
+1  -- -- -- -- -- wB -- --

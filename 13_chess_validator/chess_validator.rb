@@ -26,7 +26,10 @@ class ChessValidator
   end
 
   def validate_move(from, to)
-    color, piece = at_position(from).split('')
+    piece_at_position = at_position(from)
+    return false if piece_at_position == EMPTY
+
+    color, piece = piece_at_position.split('')
     case piece
     when 'P' then validate_pawn_move(from,to,color)
     when 'R' then 'ROOK'
