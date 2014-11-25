@@ -54,6 +54,7 @@ class ChessValidator
           return true
         end
       end
+      return false
     end
 
     # horizontal
@@ -66,6 +67,7 @@ class ChessValidator
           return true
         end
       end
+      return false
     end
 
     # diagonal
@@ -80,7 +82,6 @@ class ChessValidator
      row = row.send(row_operand, 1)
      column = column.send(column_operand, 1)
     end
-
     return false
   end
 
